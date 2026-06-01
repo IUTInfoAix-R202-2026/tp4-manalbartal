@@ -1,6 +1,7 @@
 package fr.univ_amu.iut.exercice5;
 
 import com.google.inject.Inject;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -31,6 +32,8 @@ public class PokemonViewModel {
   @Inject
   public PokemonViewModel(PokemonService service) {
     this.service = service;
+    pokemons.setAll(service.tousLesPokemons());
+    resume.bind(Bindings.size(pokemons).asString().concat(" Pokémon"));
 
     // TODO exercice 5 : remplir la liste observable à partir du service, puis
     // lier `resume` au nombre d'éléments (ex : "6 Pokémon").
@@ -69,5 +72,18 @@ public class PokemonViewModel {
     //    S'il est déjà présent : publier un statut (sans l'ajouter en double).
     //    S'il n'existe pas : publier un statut "introuvable".
     // Astuce : Optional offre ifPresentOrElse(present, absent).
+    service
+        .chercherParNom(recherche.get())
+        .ifPresentOrElse(
+            p -> {
+              if (pokemons.contains(p)) {
+                statut.set(p.nom() + " est déjà dans la liste.");
+              } else {
+                pokemons.add(p);
+                recherche.set("");
+                statut.set("");
+              }
+            },
+            () -> statut.set("« " + recherche.get() + " » introuvable."));
   }
 }
