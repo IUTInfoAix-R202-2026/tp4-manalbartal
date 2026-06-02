@@ -9,8 +9,7 @@ import java.util.List;
  *
  * <p>Annoté {@code @Singleton} : Guice n'en crée qu'UNE seule instance pour toute l'application.
  * Tous les composants qui l'injectent partagent donc le même journal. Sans cette annotation, Guice
- * créerait une nouvelle instance à chaque injection (comportement par défaut), et les événements
- * seraient éparpillés dans des journaux distincts.
+ * créerait une nouvelle instance à chaque injection (comportement par défaut), et les événements a
  */
 @Singleton
 public class JournalActivite {
